@@ -27,7 +27,7 @@ conn.sync()
 })
 .catch((error) => console.log(error))
 
-app.use("/api/autoes", autorRoutes)
+app.use("/api/autores", autorRoutes)
 
 app.get("/", (resquest, response) => {
         response.status(200).json({ mensagem: "olá mundo" })

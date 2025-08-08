@@ -1,4 +1,4 @@
-import { Router, Router } from "express";
+import { Router } from "express";
 import { cadastrarAutor } from "../controllers/autorControllers.js";
 
 const router = Router()
