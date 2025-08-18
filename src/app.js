@@ -3,8 +3,8 @@ import cors from "cors";
 import { conn } from "./config/sequelize.js";
 
 //tabelas
-import autorModel from "./models/autorModel.js";
-import { error } from "console";
+import "./models/association.js"
+
 
 //ROTAS
 import autorRoutes from "./routes/autorRoutes.js"
