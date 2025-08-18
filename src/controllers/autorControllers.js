@@ -1,3 +1,4 @@
+import { request, response } from "express";
 import autorModel from "../models/autorModel.js"
 
 export const cadastrarAutor = async (request, response) => {
@@ -77,4 +78,57 @@ export const listarTodosAutores = async (request, response) => {
 
     }
 
+}
+
+export const listarAutor = async (request, response) => {
+    try{
+    const {id} = request.params
+    const autorId = await autorModel.findByPk(id)
+    console.log(autorId);
+
+    if(!autorId){
+        return response.status(404).json({mensagem: "autor não encontrado"})
+    }
+
+    response.status(200).json({mensagem: autorId})
+} catch (error){
+    console.error(error);
+    response.status(500).json({mensagem: "erro INterno servidor"})
+}
+
+}
+
+export const atualizarAutor = async (request, response) => {
+    try {
+        const { id } = request.params
+        const { nome, biografia, dataNascimento, nacionalidade} = request.body
+
+        const autor = await autorModel.findByPk(id)
+
+        if(!autor){
+            return response.status(404).json({mensagem: "Autor não encontrado"})
+        }
+
+        await autor.update({ nome, biografia, dataNascimento, nacionalidade})
+
+        response.status(200).json(autor);
+
+    } catch (error) {
+        response.status(400).json({mensagem: "Erro ao atualizar autor"})
+    }
+}
+
+export const deletarAutor = async (request, response) => {
+    try {
+        const {id} = request.params
+        const autorId = await autorModel.findByPk(id)
+        if(!autorId){
+            response.status(404).json({mensagem: "Error ao encontrar autor"})
+        }
+
+        await autorId.destroy()
+        response.status(200).json({mensagem: `Autor: ${autorId} deletado com sucesso`})
+    } catch (error) {
+        response.status(400).json({mensagem: "Erro ao deletar autor"})
+    }
 }

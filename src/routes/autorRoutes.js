@@ -1,10 +1,15 @@
 import { Router } from "express";
-import { cadastrarAutor, listarTodosAutores } from "../controllers/autorControllers.js";
+import { atualizarAutor, cadastrarAutor, listarAutor, listarTodosAutores } from "../controllers/autorControllers.js";
 
 const router = Router()
 
 router.post("/", cadastrarAutor)
 router.get("/", listarTodosAutores)
+router.get("/:id", listarAutor)
+router.put("/:id", atualizarAutor)
+
+
+
 
 export default router;
 
