@@ -60,75 +60,75 @@ export const listarTodosAutores = async (request, response) => {
     const offset = (page - 1) * limit
 
     try {
-       const autores = await autorModel.findAndCountAll({
-        offset,
-        limit
-       })
-       const totalPaginas = Math.ceil(autores.count / limit)
-       response.status(200).json({
-        totalAutores: autores.count,
-        totalPaginas,
-        paginaAtual: page,
-        autoresPorPagina: limit,
-        autores: autores.rows
-       })
+        const autores = await autorModel.findAndCountAll({
+            offset,
+            limit
+        })
+        const totalPaginas = Math.ceil(autores.count / limit)
+        response.status(200).json({
+            totalAutores: autores.count,
+            totalPaginas,
+            paginaAtual: page,
+            autoresPorPagina: limit,
+            autores: autores.rows
+        })
     } catch (error) {
         console.log(error)
-        response.status(500).json({mensagem: "Erro interno ao listar autores"})
+        response.status(500).json({ mensagem: "Erro interno ao listar autores" })
 
     }
 
 }
 
 export const listarAutor = async (request, response) => {
-    try{
-    const {id} = request.params
-    const autorId = await autorModel.findByPk(id)
-    console.log(autorId);
+    try {
+        const { id } = request.params
+        const autorId = await autorModel.findByPk(id)
+        console.log(autorId);
 
-    if(!autorId){
-        return response.status(404).json({mensagem: "autor não encontrado"})
+        if (!autorId) {
+            return response.status(404).json({ mensagem: "autor não encontrado" })
+        }
+
+        response.status(200).json({ mensagem: autorId })
+    } catch (error) {
+        console.error(error);
+        response.status(500).json({ mensagem: "erro INterno servidor" })
     }
-
-    response.status(200).json({mensagem: autorId})
-} catch (error){
-    console.error(error);
-    response.status(500).json({mensagem: "erro INterno servidor"})
-}
 
 }
 
 export const atualizarAutor = async (request, response) => {
     try {
         const { id } = request.params
-        const { nome, biografia, dataNascimento, nacionalidade} = request.body
+        const { nome, biografia, dataNascimento, nacionalidade } = request.body
 
         const autor = await autorModel.findByPk(id)
 
-        if(!autor){
-            return response.status(404).json({mensagem: "Autor não encontrado"})
+        if (!autor) {
+            return response.status(404).json({ mensagem: "Autor não encontrado" })
         }
 
-        await autor.update({ nome, biografia, dataNascimento, nacionalidade})
+        await autor.update({ nome, biografia, dataNascimento, nacionalidade })
 
         response.status(200).json(autor);
 
     } catch (error) {
-        response.status(400).json({mensagem: "Erro ao atualizar autor"})
+        response.status(400).json({ mensagem: "Erro ao atualizar autor" })
     }
 }
 
 export const deletarAutor = async (request, response) => {
     try {
-        const {id} = request.params
+        const { id } = request.params
         const autorId = await autorModel.findByPk(id)
-        if(!autorId){
-            response.status(404).json({mensagem: "Error ao encontrar autor"})
+        if (!autorId) {
+            response.status(404).json({ mensagem: "Error ao encontrar autor" })
         }
 
         await autorId.destroy()
-        response.status(200).json({mensagem: `Autor: ${autorId} deletado com sucesso`})
+        response.status(200).json({ mensagem: `Autor: ${autorId} deletado com sucesso` })
     } catch (error) {
-        response.status(400).json({mensagem: "Erro ao deletar autor"})
+        response.status(400).json({ mensagem: "Erro ao deletar autor" })
     }
 }

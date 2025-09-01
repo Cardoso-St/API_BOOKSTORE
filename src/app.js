@@ -1,4 +1,4 @@
-import express, { response } from "express";
+import express from "express";
 import cors from "cors";
 import { conn } from "./config/sequelize.js";
 
@@ -8,6 +8,7 @@ import "./models/association.js"
 
 //ROTAS
 import autorRoutes from "./routes/autorRoutes.js"
+import livroRouter from "./routes/livroRouter.js"
 
 const app = express();
 
@@ -28,9 +29,7 @@ conn.sync()
 .catch((error) => console.log(error))
 
 app.use("/api/autores", autorRoutes)
+app.use("/api/livros", livroRouter)
 
-app.get("/", (resquest, response) => {
-        response.status(200).json({ mensagem: "olá mundo" })
-    })
 
 export default app;

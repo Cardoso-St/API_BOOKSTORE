@@ -42,7 +42,7 @@ const livroModel = conn.define(
         tableName: "livros",
         timestamps: true,
         createdAt: "created_at",
-        updatedAt: "updatedAt"
+        updatedAt: "updated_at"
     },
     {},
 
