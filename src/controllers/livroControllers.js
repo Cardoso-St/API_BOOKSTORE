@@ -115,7 +115,7 @@ export const listarTodosLivros = async (request, response) => {
             livros: livrosFormatados
         })
     } catch (error) {
-        console.log(error)
+        response.status(500).json({mensagem: "erro interno do servidor"})
     }
 }
 
