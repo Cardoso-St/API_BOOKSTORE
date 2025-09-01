@@ -115,6 +115,33 @@ export const listarTodosLivros = async (request, response) => {
             livros: livrosFormatados
         })
     } catch (error) {
+        console.log(error)
+    }
+}
 
+export const listarLivro = async (request, response) => {
+    const { id } = request.params;
+
+    if (!id) {
+        response.status(400).json({ mensagem: "Id obrigátorio" })
+        return
+    }
+
+    try {
+        const livro = await livroModel.findByPk(id, {
+            include: {
+                model: autorModel,
+                through: { attributes: [] },
+                attributes: { exclude: ["created_at", "updated_at"] }
+            },
+        })
+
+        if (!livro) {
+            response.status(404).json({ mensagem: "Livro não encontrado" })
+        }
+
+        response.status(200).json({ livro });
+    } catch (error) {
+        response.status(500).json({mensagem: "Erro interno do servidor"})
     }
 }
