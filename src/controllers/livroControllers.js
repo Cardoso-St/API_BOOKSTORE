@@ -74,3 +74,79 @@ export const cadastrarLivro = async (request, response) => {
     }
 
 }
+
+export const listarTodosLivros = async (request, response) => {
+    const page = parseInt(request.query.page) || 1;
+    const limit = parseInt(request.query.limit) || 10;
+    const offset = (page - 1)
+
+    try {
+        const livros = await livroModel.findAndCountAll({
+            include: {
+                model: autorModel,
+                through: { attributes: [] }
+            },
+            limit,
+            offset
+        })
+
+        const livrosFormatados = livros.rows.map((livro) => {
+            return {
+                id: livro.id,
+                titulo: livro.titulo,
+                isbn: livro.isbn,
+                descricao: livro.descricao,
+                ano_publicacao: livro.ano_publicacao,
+                genero: livro.genero,
+                quantidade_total: livro.quantidade,
+                quantidade_disponivel: livro.quantidade_disponivel,
+                autores: livro.autores.map((autor) => ({
+                    id: autor.id,
+                    nome: autor.nome
+                }))
+            }
+        })
+        const totalDePaginas = Math.ceil(livros.count / limit)
+        response.status(200).json({
+            totalLivros: livros.count,
+            totalPaginas: totalDePaginas,
+            paginaAtual: page,
+            livrosPorPagina: limit,
+            livros: livrosFormatados
+        })
+    } catch (error) {
+        response.status(500).json({mensagem: "erro interno do servidor"})
+    }
+}
+
+export const listarLivro = async (request, response) => {
+    const { id } = request.params;
+
+    if (!id) {
+        response.status(400).json({ mensagem: "Id obrigátorio" })
+        return
+    }
+
+    try {
+        const livro = await livroModel.findByPk(id, {
+            include: {
+                model: autorModel,
+                through: { attributes: [] },
+                attributes: { exclude: ["created_at", "updated_at"] }
+            },
+        })
+
+        if (!livro) {
+            response.status(404).json({ mensagem: "Livro não encontrado" })
+        }
+
+        response.status(200).json({ livro });
+    } catch (error) {
+        response.status(500).json({mensagem: "Erro interno do servidor"})
+    }
+}
+
+//Control imagem
+export const cadastrarCapaLivro = async(request, response) => {
+    const imagem = request.file
+}
