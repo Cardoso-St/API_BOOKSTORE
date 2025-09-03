@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { cadastrarLivro, cadastrarCapaLivro, listarLivro, listarTodosLivros } from "../controllers/livroControllers.js";
+import { cadastrarLivro, cadastrarCapaLivro, listarLivro, listarTodosLivros, deletarLivro, atualizarLivro} from "../controllers/livroControllers.js";
 import { imagemUpload } from "../middleware/imageUpload.js";
 
 const router = Router()
